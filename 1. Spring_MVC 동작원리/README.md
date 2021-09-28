@@ -459,8 +459,8 @@ DefaultServletHandlerConfigurer.eanble()메소드가 등록하는SimpleUrlHandle
 
 예를 들어 "index.html" 경로로 요청이 들어오면 1번과정에서 해당하는 컨트롤러를 찾지 못하므로 2번 과정을 통해 디폴트 서블릿이 /index.html요청을 처리하게된다.
 
-DefaultServletHandlerConfigurer#enable()외에 몇몇 설정도 SimpleUrlHandlerMapping을 등록
-하는데 DefualtServletHandlerConfiguer#enable()이 등록하는 SimpleUrlHandlerMapping의 우선
+DefaultServletHandlerConfigurer.enable()외에 몇몇 설정도 SimpleUrlHandlerMapping을 등록
+하는데 DefualtServletHandlerConfiguer.enable()이 등록하는 SimpleUrlHandlerMapping의 우선
 순위가 가장낮다. 
 
 따라서 DefaultServletHandlerConfigurer.eanble()을 설정하면 별도 설정이
