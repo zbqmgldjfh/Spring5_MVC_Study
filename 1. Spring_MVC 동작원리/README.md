@@ -9,8 +9,7 @@
 ## 1. 스프링 MVC 핵심 구성 요소
 
  다음 그림을 살펴보시죠, 스프링 __MVC의 핵심 구성 요소__ 는 다음과 같습니다
-
-![SpringMVC](C:\Users\JiWoo\Desktop\SpringMVC.png)
+ <img src="https://user-images.githubusercontent.com/60593969/135022231-0096b655-ce81-4ebb-bd9e-9258e60a0591.png" width="800"/>  
 
 
 
@@ -70,8 +69,7 @@ DispathcerServlet은 ViewResolver 가 리턴한 View 객체에 응답 결과 생
 
 JSP를 사용한다면 View 객체는 JSP를 실행할 때 웹 브라우저에 전송할 응답 결과를 생성하고 끝나게 됩니다.
 
-
-
+    
 ## 1-1. 컨트롤러와 핸들러
 
 #### HandlerMapping - 컨트롤러 검색
@@ -152,8 +150,7 @@ DispatcherServlet은 핸들러 객체의 실제 타입에 상관없이 컨트롤
  bean은 아래 그림처럼 DispatcherServlet이 생성한 스프링 컨테이너를 통해 구하게 된다.
 
 따라서 DispatcherServlet이 사용하는 설정파일에 이들 빈에 대한 정의가 포함되어 있어야한다.
-
-![DispatcherServlet](C:\Users\JiWoo\Desktop\DispatcherServlet.bmp)
+<img src="https://user-images.githubusercontent.com/60593969/135022668-18d6fa4a-5da8-47e4-b42f-3ee47f383221.png" width=800 />
 
 
 
