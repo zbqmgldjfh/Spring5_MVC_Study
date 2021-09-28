@@ -368,3 +368,98 @@ InternalResourceView는 Map객체에 담겨있는 key값을 request.setAttribute
 인사말:${greeting}
 ```
 
+## 6. 디폴트 핸들러와 HandlerMapping 우선순위
+
+앞 챕터의 web.xml 설정을 보면 DispatcherServlet에대한 매핑경로를 다음과 같이 '/'로 주었다.
+
+```xml
+<servlet>
+    <servlet-name>dispatcher</servlet-name>
+    <servlet-class>
+        org.springframework.web.servlet.DispatcherServlet
+    </servlet-class>
+    ...생략
+</servlet> 
+
+<servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/</url-pattern>
+</servlet-mapping>
+```
+
+매핑경로가 '/'인 경우 **.jsp**로 끝나는 요청을 제외한 모든 요청을 DispatcherServlet이 처리한다.
+즉 /index.html이나 /css/bootstrap.css와 같이 확장자가 .jsp가 아닌 모든요청을 DispatcherServlet이 처리한다.
+
+
+
+그런데 @EnableWebMvc애노테이션이 등록하는 HandlerMapping은 @Controller애노테이션을 적용한
+빈객체가 처리할 수 있는 요청 경로만 대응할수있다. 
+
+예를들어 등록된 컨트롤러가 한개이고, 그 컨트롤러가 @GetMapping("/hello")설정을 사용한다면 /hello경로만 처리할수있게된다.
+
+따라서 "/index.html"이나 "/css/bootstrap.css"와 같은 요청을 처리할 수 있는 컨트롤러 객체를 찾지 못해 DispatcherServlet은 404응답을 전송한다.
+
+"/index.html"이나 "/css/bootstrap.css"와 같은 경로를 처리하기 위한 컨트롤러 객체를
+직접 구현할 수도있지만, 그보다는 WebMvcConfigurer의 configureDefaultServletHandling()메소드
+를 사용하는것이 편하다. 
+
+
+
+앞장에서도 다음설정을 사용했다.
+
+```java
+@Configuration
+@EnableWebMvc
+public class MvcConfig implements WebMvcConfigurer{
+    @Override
+    public void configureDefaultServletHandling(
+        DefualtServletHandlerConfigurer configurer){
+        configurer.enable();
+    }
+}
+```
+
+위 설정에서 DefaultServletHandlerConfigurer#enable() 메소드는 다음의 두빈객체를 추가한다.
+
+- **DefaultServletHttpRequestHandler**
+- **SimpleUrlHandlerMapping**
+
+
+
+DefaultServletHttpRequestHandler는 클라이언트의 모든요청을 WAS(웹 어플리케이션 서버, 톰캣이나 웹로직 등)가 제공하는 디폴트 서블릿에 전달한다. 
+
+예를들어 "/index.html"에 대한 처리를 DefaultServletHttpRequestHandler에 요청하면 이요청을 다시 디폴트 서블릿에 전달해서 처리하도록 한다.
+
+그리고 SimpleUrlHandlerMapping을 이용해서 모든 경로("/**")를 DefaultServletHttp RequestHandler 를 이용해서 처리하도록 설정한다.
+
+@EnableWebMvc 애노테이션이 등록하는 RequestMappingHandlerMapping의 적용 우선순위가
+DefaultServletHandlerConfigurer.eanble()메소드가 등록하는SimpleUrlHandlerMapping의 우선순위 보다 높다. 
+
+때문에 웹브라우저의 요청이 들어오면 DispatcherServlet은 다음과 같은방식으로 요청을 처리한다.
+
+
+
+1) RequestMappingHandlerMapping을 사용해서 요청을 처리할 핸들러를 검색한다.
+
+   - 존재하면 해당 컨트롤러를 이용해서 요청을 처리한다
+
+     
+
+2) 존재하지 않으면 SimpleUrlHandlerMapping을 사용해서 요청을 처리할 핸들러를 검색한다.
+
+   
+
+- DefaultServletHandlerConfigurer.eanble() 메소드가 등록한 SimpleUrlHandlerMapping은 "/**" 경로 
+
+  (즉 모든경로)에 대해 DefaultServletHttpRequestHandler를 리턴한다.
+
+- DispatcherServlet은 DefaultServletHttpRequestHadler에 처리를 요청한다.
+
+- DefaultServletHttpRequestHandler는 디폴트 서블릿에 처리를 위임한다.
+
+예를 들어 "index.html" 경로로 요청이 들어오면 1번과정에서 해당하는 컨트롤러를 찾지 못하므로 2번 과정을 통해 디폴트 서블릿이 /index.html요청을 처리하게된다.
+
+DefaultServletHandlerConfigurer#enable()외에 몇몇 설정도 SimpleUrlHandlerMapping을 등록
+하는데 DefualtServletHandlerConfiguer#enable()이 등록하는 SimpleUrlHandlerMapping의 우선
+순위가 가장낮다. 따라서 DefaultServletHandlerConfigurer#eanble()을 설정하면 별도 설정이
+없는 모든 요청경로를 디폴트 서블릿이처리하게된다.
