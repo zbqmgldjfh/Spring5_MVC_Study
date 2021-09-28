@@ -461,5 +461,7 @@ DefaultServletHandlerConfigurer.eanble()메소드가 등록하는SimpleUrlHandle
 
 DefaultServletHandlerConfigurer#enable()외에 몇몇 설정도 SimpleUrlHandlerMapping을 등록
 하는데 DefualtServletHandlerConfiguer#enable()이 등록하는 SimpleUrlHandlerMapping의 우선
-순위가 가장낮다. 따라서 DefaultServletHandlerConfigurer#eanble()을 설정하면 별도 설정이
+순위가 가장낮다. 
+
+따라서 DefaultServletHandlerConfigurer.eanble()을 설정하면 별도 설정이
 없는 모든 요청경로를 디폴트 서블릿이처리하게된다.
