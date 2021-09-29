@@ -157,7 +157,7 @@ public class ControllerConfig{
 
     http://localhost:8080/sp5-chap11/register/step1
 
-<img src="C:\Users\JiWoo\Desktop\화면 캡처 2021-09-29 104237.png" alt="화면 캡처 2021-09-29 104237" style="zoom: 80%;" />
+<img src="https://user-images.githubusercontent.com/60593969/135201822-8b235b6e-ec87-4c8d-9c65-4cc2586441fc.png" width=400 />
 
 
 
