@@ -915,6 +915,7 @@ public SurveyController surveyController(){
 ```
 
 
+
 ## 12. Model을 통해 컨트롤러에서뷰에 데이터 전달하기    
 
 컨트롤러는 뷰가 응답화면을 구성하는데 필요한 데이터를 생성해서 전달해야한다. 이때 사용하는것이 Model이다.
@@ -1053,6 +1054,7 @@ public class SurveyController {
 ```
 
 
+
 ## 12.1 ModelAndView를 통한 뷰선택과 모델전달
 
 ##### 지금까지 구현한 컨트롤러는 두가지특징이있다.
@@ -1067,14 +1069,16 @@ ModelAndView는 모델과 뷰이름을 함께 제공한다.
 
 다음과같이 ModelAndView클래스를 이용해 SurveyController 클래스의 form()메소드를 구현할수있다.
 
-    @GetMapping
-    public ModelAndView form(){
-        List<Question> questions=createQuestions();
-        ModelAndView mav=new ModelAndView();
-        mav.addObject("questions",questions);
-        mav.setViewName("survey/surveyForm");
-        return mav;
-    }
+```java
+@GetMapping
+public ModelAndView form(){
+    List<Question> questions=createQuestions();
+    ModelAndView mav=new ModelAndView();
+    mav.addObject("questions",questions);
+    mav.setViewName("survey/surveyForm");
+    return mav;
+}
+```
 
 뷰에 전달할 모델 데이터는 addObject()메소드로 추가한다. 뷰이름은 setViewName()메소드를 이용해지정.
 
@@ -1082,7 +1086,6 @@ ModelAndView는 모델과 뷰이름을 함께 제공한다.
 
 ## 12.2 GET방식과 POST방식에 동일이름 커맨드객체 사용하기
 
-<<<<<<< HEAD
 < form:form> 태그는 사용하려면 커맨드 객체가 반드시 존재해야한다. 최초에 폼을 보여주는 요청에 대해 
 
 < form:form>태그를 사용하려면 폼표시 요청이 왔을때에도 커맨드 객체를 생성해서 모델에 저장해야한다.
@@ -1108,19 +1111,20 @@ public String handleStep2(
 
 입력폼과 전송 처리에서 사용할 커맨드객체의 속성이름이 클래스 이름과 다르다면 GET요청과 POST요청을 처리하는 메소드에@ModelAttribute 애노테이션을 붙인 커맨드 객체를 파라미터로 추가하면된당.
 
-=======
-    커맨드객체를 파라미터로 추가한결과
-    @PostMapping("/register/step2")
-    public String handleStep2(
-            @RequestParam(value="agree",defaultValue = "false") Boolean agree, RegisterRequest registerRequest){
+```java
+커맨드객체를 파라미터로 추가한결과
+@PostMapping("/register/step2")
+public String handleStep2(
+        @RequestParam(value="agree",defaultValue = "false") Boolean agree,             RegisterRequest registerRequest){
         if(!agree)
             return "register/step1";
-            return "register/step2";
+        return "register/step2";
     }
-    
-    이름을 명시적으로 지정하려면 @ModelAttribute애노테이션을 사용한다. 예를들어 "/login"요청 경로일때
-    GET방식이면 로그인 폼을 보여주고 POST방식이면 로그인을처리하도록 구현한 컨트롤러를 만들어야
-    한다고 하자. 입력폼과 전송 처리에서 사용할 커맨드객체의 속성이름이 클래스 이름과
-    다르다면 GET요청과 POST요청을 처리하는 메소드에@ModelAttribute 애노테이ㅕㄴ을 붙인
-    커맨드 객체를 파라미터로 추가하면된당.
->>>>>>> 7883de0883e12dd77c34f290e2221d148fee5646
+```
+
+이름을 명시적으로 지정하려면 @ModelAttribute애노테이션을 사용한다. 
+
+예를들어 "/login"요청 경로일때 GET방식이면 로그인 폼을 보여주고 POST방식이면 로그인을처리하도록 구현한 컨트롤러를 만들어야 한다고 하자. 
+
+입력폼과 전송 처리에서 사용할 커맨드객체의 속성이름이 클래스 이름과 다르다면 GET요청과 POST요청을 처리하는 메소드에@ModelAttribute 애노테이션을 붙인 커맨드 객체를 파라미터로 추가하면된당.
+
